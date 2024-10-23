@@ -3,3 +3,4 @@ license-sros24.txt
 *.bak
 *.pcap
 *.drawio
+.gitignore
