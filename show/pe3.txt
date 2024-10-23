@@ -1,0 +1,333 @@
+﻿﻿A:admin@pe3# /show service id evpn-mh-1 base | no-more
+
+===============================================================================
+Service Basic Information
+===============================================================================
+Service Id        : 1000                Vpn Id            : 0
+Service Type      : VPLS                
+MACSec enabled    : no                  
+Name              : evpn-mh-1
+Description       : (Not Specified)
+Customer Id       : 1                   Creation Origin   : manual
+Last Status Change: 10/23/2024 03:20:46 
+Last Mgmt Change  : 10/23/2024 03:20:29 
+Etree Mode        : Disabled            
+Admin State       : Up                  Oper State        : Up
+MTU               : 1514                
+SAP Count         : 1                   SDP Bind Count    : 0
+Snd Flush on Fail : Disabled            Host Conn Verify  : Disabled
+SHCV pol IPv4     : None
+Propagate MacFlush: Disabled            Per Svc Hashing   : Disabled
+Allow IP Intf Bind: Disabled
+Fwd-IPv4-Mcast-To*: Disabled            Fwd-IPv6-Mcast-To*: Disabled
+Mcast IPv6 scope  : mac-based           
+Def. Gateway IP   : None                
+Def. Gateway MAC  : None                
+Temp Flood Time   : Disabled            Temp Flood        : Inactive
+Temp Flood Chg Cnt: 0                   
+SPI load-balance  : Disabled            
+TEID load-balance : Disabled            
+Lbl Eth/IP L4 TEID: Disabled            
+Src Tep IP        : N/A                 
+Vxlan ECMP        : Disabled            
+MPLS ECMP         : Disabled            
+Ignore MTU Mismat*: Disabled            
+Tunnel ELMI       : Disabled            
+ 
+-------------------------------------------------------------------------------
+Service Access & Destination Points
+-------------------------------------------------------------------------------
+Identifier                               Type         AdmMTU  OprMTU  Adm  Opr
+-------------------------------------------------------------------------------
+sap:1/1/c3/1:10                          q-tag        1518    1518    Up   Up
+===============================================================================
+* indicates that the corresponding row element may have been truncated.
+
+[/]
+A:admin@pe3# /show service id evpn-mh-1 fdb detail
+
+===============================================================================
+Forwarding Database, Service 1000
+===============================================================================
+ServId     MAC               Source-Identifier       Type     Last Change
+            Transport:Tnl-Id                         Age      
+-------------------------------------------------------------------------------
+1000       aa:c1:ab:33:75:aa sap:1/1/c3/1:10         L/0      10/23/24 23:37:21
+1000       aa:c1:ab:92:fa:61 eES:                    Evpn     10/23/24 20:08:07
+                             01:00:00:00:00:23:00:00:00:01
+-------------------------------------------------------------------------------
+No. of MAC Entries: 2
+-------------------------------------------------------------------------------
+Legend:L=Learned O=Oam P=Protected-MAC C=Conditional S=Static Lf=Leaf T=Trusted
+===============================================================================
+
+[/]
+A:admin@pe3# /show service id evpn-mh-1 evpn-mpls | no-more
+
+===============================================================================
+BGP EVPN-MPLS Dest (Instance 1)
+===============================================================================
+TEP Address                     Transport:Tnl     Egr Label  Oper  Mcast  Num
+                                                             State        MACs
+-------------------------------------------------------------------------------
+1.1.1.1                         isis:524291       524286     Up    bum    0
+2.2.2.2                         isis:524293       101001     Up    bum    0
+-------------------------------------------------------------------------------
+Number of entries: 2
+-------------------------------------------------------------------------------
+===============================================================================
+
+===============================================================================
+BGP EVPN-MPLS Dest (Instance 2)
+===============================================================================
+TEP Address                     Transport:Tnl     Egr Label  Oper  Mcast  Num
+                                                             State        MACs
+-------------------------------------------------------------------------------
+No Matching Entries
+===============================================================================
+
+===============================================================================
+BGP EVPN-MPLS Ethernet Segment Dest (Instance 1)
+===============================================================================
+Eth SegId                       Num. Macs               Last Update
+-------------------------------------------------------------------------------
+01:00:00:00:00:23:00:00:00:01   1                       10/23/2024 20:11:09
+-------------------------------------------------------------------------------
+Number of entries: 1
+-------------------------------------------------------------------------------
+===============================================================================
+
+===============================================================================
+BGP EVPN-MPLS Ethernet Segment Dest (Instance 2)
+===============================================================================
+Eth SegId                       Num. Macs               Last Update
+-------------------------------------------------------------------------------
+No Matching Entries
+===============================================================================
+
+===============================================================================
+BGP EVPN-MPLS ES BMAC Dest
+===============================================================================
+ES BMAC Addr                            Last Change
+-------------------------------------------------------------------------------
+No Matching Entries
+===============================================================================
+
+[/]
+A:admin@pe3# /tools dump service evpn usage
+
+vxlan-srv6-evpn-mpls usage statistics at 10/23/2024 23:40:12:
+
+MPLS-TEP                                        :             2
+VXLAN-TEP                                       :             0
+SRV6-TEP                                        :             0
+Total-TEP                                       :      2/ 16383
+
+Mpls Dests (TEP, Egress Label + ES + ES-BMAC)   :             3
+Mpls Etree Leaf Dests                           :             0
+Vxlan Dests (TEP, Egress VNI + ES)              :             0
+Srv6 Dests (TEP, SID  + ES)                     :             0
+Total-Dest                                      :      3/196607
+
+Sdp Bind +  Evpn Dests                          :      3/245759
+ES L2/L3 PBR                                    :      0/ 32767
+Evpn Etree Remote BUM Leaf Labels               :             0
+
+
+[/]
+A:admin@pe3# /show router bgp routes evpn mac | no-more
+===============================================================================
+ BGP Router ID:3.3.3.3          AS:65000       Local AS:65000      
+===============================================================================
+ Legend -
+ Status codes  : u - used, s - suppressed, h - history, d - decayed, * - valid
+                 l - leaked, x - stale, > - best, b - backup, p - purge
+ Origin codes  : i - IGP, e - EGP, ? - incomplete
+
+===============================================================================
+BGP EVPN MAC Routes
+===============================================================================
+Flag  Route Dist.         MacAddr           ESI
+      Tag                 Mac Mobility      Label1
+                          Ip Address        
+                          NextHop           
+-------------------------------------------------------------------------------
+u*>i  2.2.2.2:1           aa:c1:ab:92:fa:61 01:00:00:00:00:23:00:00:00:01
+      0                   Seq:0             LABEL 1048575
+                          n/a
+                          2.2.2.2
+
+-------------------------------------------------------------------------------
+Routes : 1
+===============================================================================
+
+[/]
+A:admin@pe3# /show router bgp routes evpn incl-mcast | no-more
+===============================================================================
+ BGP Router ID:3.3.3.3          AS:65000       Local AS:65000      
+===============================================================================
+ Legend -
+ Status codes  : u - used, s - suppressed, h - history, d - decayed, * - valid
+                 l - leaked, x - stale, > - best, b - backup, p - purge
+ Origin codes  : i - IGP, e - EGP, ? - incomplete
+
+===============================================================================
+BGP EVPN Inclusive-Mcast Routes
+===============================================================================
+Flag  Route Dist.         OrigAddr
+      Tag                 NextHop
+-------------------------------------------------------------------------------
+u*>i  1.1.1.1:1           1.1.1.1
+      0                   1.1.1.1
+
+u*>i  2.2.2.2:1           2.2.2.2
+      0                   2.2.2.2
+
+-------------------------------------------------------------------------------
+Routes : 2
+===============================================================================
+
+[/]
+A:admin@pe3# /show router bgp routes evpn eth-seg | no-more
+===============================================================================
+ BGP Router ID:3.3.3.3          AS:65000       Local AS:65000      
+===============================================================================
+ Legend -
+ Status codes  : u - used, s - suppressed, h - history, d - decayed, * - valid
+                 l - leaked, x - stale, > - best, b - backup, p - purge
+ Origin codes  : i - IGP, e - EGP, ? - incomplete
+
+===============================================================================
+BGP EVPN Eth-Seg Routes
+===============================================================================
+Flag  Route Dist.         ESI                           NextHop
+      OrigAddr                                          
+-------------------------------------------------------------------------------
+No Matching Entries Found.
+===============================================================================
+
+[/]
+A:admin@pe3# /show router bgp routes evpn auto-disc | no-more
+===============================================================================
+ BGP Router ID:3.3.3.3          AS:65000       Local AS:65000      
+===============================================================================
+ Legend -
+ Status codes  : u - used, s - suppressed, h - history, d - decayed, * - valid
+                 l - leaked, x - stale, > - best, b - backup, p - purge
+ Origin codes  : i - IGP, e - EGP, ? - incomplete
+
+===============================================================================
+BGP EVPN Auto-Disc Routes
+===============================================================================
+Flag  Route Dist.         ESI                           NextHop
+      Tag                                               Label
+-------------------------------------------------------------------------------
+u*>i  1.1.1.1:1           01:00:00:00:00:23:00:00:00:01 1.1.1.1
+      0                                                 LABEL 524287
+
+u*>i  1.1.1.1:1           01:00:00:00:00:23:00:00:00:01 1.1.1.1
+      MAX-ET                                            LABEL 0
+
+u*>i  2.2.2.2:1           01:00:00:00:00:23:00:00:00:01 2.2.2.2
+      0                                                 LABEL 1048575
+
+u*>i  2.2.2.2:1           01:00:00:00:00:23:00:00:00:01 2.2.2.2
+      MAX-ET                                            LABEL 0
+
+-------------------------------------------------------------------------------
+Routes : 4
+===============================================================================
+
+[/]
+A:admin@pe3# /show router isis prefix-sids
+
+===============================================================================
+Rtr Base ISIS Instance 0 Prefix/SID Table
+===============================================================================
+Prefix                            SID        Lvl/Typ    SRMS   AdvRtr
+                                   Shared                MT     Flags
+-------------------------------------------------------------------------------
+1.1.1.1/32                        1          1/Int.      N     pe1
+                                      N.A.                  0      NnP
+2.2.2.2/32                        2          1/Int.      N     pe2
+                                      N.A.                  0      NnP
+3.3.3.3/32                        3          1/Int.      N     pe3
+                                      No                    0      NnP
+-------------------------------------------------------------------------------
+No. of Prefix/SIDs: 3 (3 unique)
+-------------------------------------------------------------------------------
+SRMS:   Y/N  = prefix SID advertised by SR Mapping Server (Y) or not (N)
+        S    = SRMS prefix SID is selected to be programmed
+Flags:  R    = Re-advertisement
+        N    = Node-SID
+        nP   = no penultimate hop POP 
+        E    = Explicit-Null  
+        V    = Prefix-SID carries a value  
+        L    = value/index has local significance  
+Shared: Yes  = local shared Node-SID
+        No   = not a local shared Node-SID
+        N.A. = not applicable for Remote prefix-sid
+===============================================================================
+
+[/]
+A:admin@pe3# /show router tunnel-table
+
+===============================================================================
+IPv4 Tunnel Table (Router: Base)
+===============================================================================
+Destination           Owner     Encap TunnelId  Pref   Nexthop        Metric
+   Color                                                              
+-------------------------------------------------------------------------------
+0.0.0.1/32 [L]        isis (0)  MPLS  524289    11     tope1          0
+0.0.0.2/32 [L]        isis (0)  MPLS  524292    11     tope2          0
+1.1.1.1/32 [L]        isis (0)  MPLS  524291    11     tope1          10
+2.2.2.2/32 [L]        isis (0)  MPLS  524293    11     tope2          10
+-------------------------------------------------------------------------------
+Flags: B = BGP or MPLS backup hop available
+       L = Loop-Free Alternate (LFA) hop available
+       E = Inactive best-external BGP route
+       k = RIB-API or Forwarding Policy backup hop
+===============================================================================
+
+[/]
+A:admin@pe3# /show router fp-tunnel-table 1
+
+===============================================================================
+IPv4 Tunnel Table Display
+
+Legend: 
+label stack is ordered from bottom-most to top-most
+B - FRR Backup
+===============================================================================
+Destination                                  Protocol         Tunnel-ID
+  Lbl/SID                                                      
+    NextHop                                                   Intf/Tunnel
+  Lbl/SID (backup)                                            
+    NextHop   (backup)                                        
+-------------------------------------------------------------------------------
+0.0.0.1/32                                   SR                524289
+  3
+    tope1                                                    1/1/c1/1
+  100001
+    tope2(B)                                                 1/1/c2/1
+0.0.0.2/32                                   SR                524292
+  3
+    tope2                                                    1/1/c2/1
+  100002
+    tope1(B)                                                 1/1/c1/1
+1.1.1.1/32                                   SR-ISIS-0         524291
+  100001
+    tope1                                                    1/1/c1/1
+  100001
+    tope2(B)                                                 1/1/c2/1
+2.2.2.2/32                                   SR-ISIS-0         524293
+  100002
+    tope2                                                    1/1/c2/1
+  100002
+    tope1(B)                                                 1/1/c1/1
+-------------------------------------------------------------------------------
+Total Entries : 4
+-------------------------------------------------------------------------------
+===============================================================================
+
+[/]
